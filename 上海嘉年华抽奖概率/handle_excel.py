@@ -3,7 +3,7 @@
 import openpyxl  # openpyxl是处理Excel表格的模块
 import sys
 import os
-base_path = os.getcwd()+'/抽奖概率/沃尔沃小程序抽奖概率'
+base_path = os.getcwd() + '/抽奖概率/上海嘉年华抽奖概率'
 sys.path.append(base_path)
 
 # 封装Excel表格的操作

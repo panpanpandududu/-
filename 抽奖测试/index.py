@@ -1,5 +1,4 @@
 # 引入模块
-from handle_excel import excel_data
 import unittest
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
@@ -7,7 +6,7 @@ from time import sleep
 import openpyxl  # openpyxl是处理Excel表格的模块
 import sys
 import os
-base_path = os.getcwd()
+base_path = os.getcwd()+'/抽奖概率/抽奖测试'
 sys.path.append(base_path)
 
 
@@ -15,7 +14,7 @@ class DrawTest(unittest.TestCase):
     def setUp(self):
         # 实例化浏览器
         self.driver = webdriver.Chrome()
-        self.driver.get("https://car.velo.com.cn/geely/")
+        self.driver.get("https://car.velo.com.cn/0818/index.html?bg=1")
         self.driver.maximize_window()
         sleep(2)
 
@@ -49,25 +48,28 @@ class DrawTest(unittest.TestCase):
 
     # 测试组
     def test_draw(self):
-        ex_tag = '/html[1]/body[1]/div[3]/div'
-        tag = [ex_tag+'[1]', ex_tag+'[2]', ex_tag+'[3]', ex_tag+'[4]', ex_tag+'[5]',
-               ex_tag+'[6]', ex_tag+'[7]', ex_tag+'[8]', ex_tag+'[9]', ex_tag+'[10]']
+        ex_tag = '/html/body/div[2]/'
+        tag = [ex_tag+'div', ex_tag+'span']
         self.get_element(
-            'xpath', '/html[1]/body[1]/div[1]/div[1]/input[1]').send_keys('s123456')
+            'xpath', '/html/body/div[1]/div/input').send_keys('s123456')
         self.get_element('classname', 'sumbit').click()
         sleep(2)
         i = 0
         all = 10
         while i < all:
+            excellist = []
             elestart = self.get_element('classname', 'start')
             elestart.click()
-            sleep(2)
-            elestop = self.get_element('classname', 'stop')
+            sleep(3)
+            elestop = self.get_element('classname', 'bgStop')
             if (elestop.is_displayed() == True):
                 elestop.click()
+                sleep(2)
                 for x in tag:
-                    value = self.get_element('xpath', x).text
-                    excel_data.excel_write_data(tag.index(x)+2, i, value)
+                    value1 = self.get_element('xpath', x).text
+                    excellist.append(value1)
+                self.excel_write_data(i+1, 1, excellist[0])
+                self.excel_write_data(i+1, 2, excellist[1])
             else:
                 sleep(2)
                 elestart.click()
