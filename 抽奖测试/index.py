@@ -14,7 +14,7 @@ class DrawTest(unittest.TestCase):
     def setUp(self):
         # 实例化浏览器
         self.driver = webdriver.Chrome()
-        self.driver.get("https://car.velo.com.cn/0818/index.html?bg=1")
+        self.driver.get("http://h5.zwlearn.com/bigScreenDraw/aodi-0116-10man")
         self.driver.maximize_window()
         sleep(2)
 
@@ -49,30 +49,32 @@ class DrawTest(unittest.TestCase):
     # 测试组
     def test_draw(self):
         ex_tag = '/html/body/div[2]/'
-        tag = [ex_tag+'div', ex_tag+'span']
+        # tag = [ex_tag+'div', ex_tag+'span']
+        listname = []
+        for i in range(1, 10):
+            name = 'name0'+str(i)
+            listname.append(name)
+        listname.append('name10')
         self.get_element(
             'xpath', '/html/body/div[1]/div/input').send_keys('s123456')
         self.get_element('classname', 'sumbit').click()
-        sleep(2)
+        sleep(5)
         i = 0
-        all = 10
+        all = 2
         while i < all:
-            excellist = []
-            elestart = self.get_element('classname', 'start')
+            elestart = self.get_element(
+                'classname', "normal")
             elestart.click()
             sleep(3)
-            elestop = self.get_element('classname', 'bgStop')
+            elestop = self.get_element(
+                'xpath', "//div[@class='bgStop stop']")
             if (elestop.is_displayed() == True):
-                elestop.click()
-                sleep(2)
-                for x in tag:
-                    value1 = self.get_element('xpath', x).text
-                    excellist.append(value1)
-                self.excel_write_data(i+1, 1, excellist[0])
-                self.excel_write_data(i+1, 2, excellist[1])
-            else:
-                sleep(2)
-                elestart.click()
+                btn = self.driver.find_elements_by_class_name("normal")[1]
+                self.driver.execute_script("arguments[0].click();", btn)
+                sleep(3)
+            for index, value in enumerate(listname):
+                value1 = self.get_element('classname', value).text
+                self.excel_write_data(index+1, i+1, value1)
             i = i + 1
 
 
